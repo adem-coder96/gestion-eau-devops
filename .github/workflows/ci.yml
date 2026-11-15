@@ -1,4 +1,3 @@
-
 name: PHP CI and Docker Build
 
 on:
@@ -45,16 +44,16 @@ jobs:
           HARBOR_USERNAME: ${{ secrets.HARBOR_USERNAME }}
           HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
         run: |
-          printf '%s' "$HARBOR_PASSWORD" | docker login localhost \
+          printf '%s' "$HARBOR_PASSWORD" | docker login localhost:80 \
             --username "$HARBOR_USERNAME" \
             --password-stdin
 
       - name: Build Docker image
         run: |
-          docker build -t localhost/devops/gestion-eau:${GITHUB_SHA::7} .
+          docker build -t localhost:80/devops/gestion-eau:${GITHUB_SHA::7} .
 
       - name: Push Docker image
         run: |
-          docker push localhost/devops/gestion-eau:${GITHUB_SHA::7}
-          docker tag localhost/devops/gestion-eau:${GITHUB_SHA::7} localhost/devops/gestion-eau:latest
-          docker push localhost/devops/gestion-eau:latest
+          docker push localhost:80/devops/gestion-eau:${GITHUB_SHA::7}
+          docker tag localhost:80/devops/gestion-eau:${GITHUB_SHA::7} localhost:80/devops/gestion-eau:latest
+          docker push localhost:80/devops/gestion-eau:latest
