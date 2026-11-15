@@ -15,7 +15,9 @@ if ($conn->connect_errno) {
     echo json_encode(['status' => 'unhealthy']);
     exit;
 }
-
-echo json_encode(['status' => 'healthy']);
+echo json_encode([
+    'status' => 'healthy',
+    'version' => 'step-5-test'
+]);
 $conn->close();
 ?>
