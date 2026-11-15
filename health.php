@@ -17,7 +17,7 @@ if ($conn->connect_errno) {
 }
 echo json_encode([
     'status' => 'healthy',
-    'version' => 'step-5-test'
+    'version' => 'demo-20261115-194629'
 ]);
 $conn->close();
 ?>
