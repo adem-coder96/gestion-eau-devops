@@ -1,14 +1,14 @@
 <?php
-// config.php
-$servername = "127.0.0.1";
-$username = "root"; // Remplacez par votre nom d'utilisateur MySQL
-$password = ""; // Remplacez par votre mot de passe MySQL
-$dbname = "depot_eau";
+// Database configuration
+$servername = getenv('DB_HOST') ?: '127.0.0.1';
+$username = getenv('DB_USER') ?: 'root';
+$password = getenv('DB_PASSWORD') ?: '';
+$dbname = getenv('DB_NAME') ?: 'depot_eau';
 
-// Créer la connexion
+// Create database connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
-// Vérifier la connexion
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
