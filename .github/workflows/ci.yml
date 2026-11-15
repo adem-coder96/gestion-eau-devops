@@ -31,15 +31,30 @@ jobs:
             -print0 | xargs -0 -n1 php -l
 
   build:
-    name: Build Docker Image
+    name: Build and Push to Harbor
     needs: test
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Login to Harbor
+        env:
+          HARBOR_USERNAME: ${{ secrets.HARBOR_USERNAME }}
+          HARBOR_PASSWORD: ${{ secrets.HARBOR_PASSWORD }}
+        run: |
+          printf '%s' "$HARBOR_PASSWORD" | docker login localhost \
+            --username "$HARBOR_USERNAME" \
+            --password-stdin
+
       - name: Build Docker image
         run: |
-          docker build -t gestion-eau:${GITHUB_SHA::7} .
+          docker build -t localhost/devops/gestion-eau:${GITHUB_SHA::7} .
+
+      - name: Push Docker image
+        run: |
+          docker push localhost/devops/gestion-eau:${GITHUB_SHA::7}
+          docker tag localhost/devops/gestion-eau:${GITHUB_SHA::7} localhost/devops/gestion-eau:latest
+          docker push localhost/devops/gestion-eau:latest
